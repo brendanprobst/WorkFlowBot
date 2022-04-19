@@ -1,10 +1,69 @@
 
 import yaml
-# pip3 install pyyaml
+import os
 
-print("Welcome")
+from themes import color
+import commands
+
+# The line below is required on Windows for
+# color formatting on default command prompt
+os.system('color')
 
 prompt = ">"
 
-userInput = input(prompt)
-print("Running command: " + userInput);
+
+stream = open('config.yml', 'r')
+data = yaml.safe_load(stream)
+# Use the presets variable below globally
+presets = data['presets']
+
+
+def executeCommand(commandArr):
+    """
+    Takes a string cmd and executes the appropriate function.
+    This function essentially maps user inputted commands to
+    their corresponding function in the code.
+    """
+    cmd = commandArr[0]
+    args = []
+    if(len(commandArr) > 1):
+        args = commandArr[1:]
+    print("")
+    if(cmd == "help"):
+        commands.helpCmd(args)
+    elif(cmd == "list"):
+        commands.listCmd(args, presets)
+    else:
+        print("That command is valid, but not yet implemented.")
+
+
+def isValidCommand(command):
+    commandArr = command.split()
+    # print(commandArr)
+    if (not commandArr or commandArr[0] not in commands.allowedCmds):
+        print(color("Invalid command. Type 'help' for a list of commands.", "FAIL"))
+    else:
+        return True
+
+# Initialize WOBot
+print(color("==============================================", "OKCYAN"))
+print(color(" Welcome to WOBot - Workflow Organization Bot", "OKCYAN"))
+print(color("==============================================", "OKCYAN"))
+
+userInput = ""
+
+print("Type", color("wob <preset-name>", "WARNING"), "to open a preset.")
+print("Example:")
+print(">wob work")
+print("Or, type 'help' for a list of commands.\n")
+
+while (userInput != "quit"):
+
+    userInput = input(prompt)
+    # TODO: prints after you type quit - figure out how to prevent that
+    # print("Running command: " + userInput)
+    if (isValidCommand(userInput)):
+        # Sends user input to executeCommand as an array
+        # executeCommand separates the input into the base
+        # command and an array of args
+        executeCommand(userInput.split())
