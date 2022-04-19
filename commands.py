@@ -1,25 +1,32 @@
+from os import startfile, getlogin
 from themes import color
-
 allowedCmds = {
     # Keep adding to this dictionary
     # If the command requires no args,
     # simply enter the usage as ""
-    "wob": {
-        "usage": "wob <preset>",
-        "description": "Opens the programs in a preset and closes other programs."
+    "help": {
+        "usage": "help [command]",
+        "description": "Returns the list of commands and their basic usage. Optionally takes a command as an arg for help on a specific command.",
     },
     "list": {
         "usage": "list [preset]",
         "description": "Lists all presets. Optionally takes a preset as an arg to list programs for a specific preset."
     },
-    "help": {
-        "usage": "help [command]",
-        "description": "Returns the list of commands and their basic usage. Optionally takes a command as an arg for help on a specific command.",
-    }}
+    "wob": {
+        "usage": "wob <preset>",
+        "description": "Opens the programs in a preset and closes other programs."
+    },
+}
 
 
-def tooManyArgs(command):
-    print("Too many args provided!")
+def usageError(command, message="Too many args provided!"):
+    """
+    Prints an error message and the usage for the given command.
+    By default, the error says 'Too many args provided!'.
+    An optional second argument (string) can be used to override
+    this message with a different one.
+    """
+    print(message)
     print(color("Usage: " + allowedCmds[command]['usage'], "WARNING"))
 
 
@@ -41,7 +48,7 @@ def helpCmd(args):
         else:
             print(color("No command named '" + args[0] + "' exists.", "FAIL"))
     else:
-        tooManyArgs("help")
+        usageError("help")
 
 
 def listCmd(args, presets):
@@ -51,14 +58,40 @@ def listCmd(args, presets):
         for preset in presets:
             print(color(preset + ":", "OKGREEN"))
             for program in presets[preset]:
-                print("\t" + program)
+                # Break each program of a particular preset into its name and path
+                programName, path = program
+                print("\t" + programName)
+                # print("\t\t" + path)
     elif len(args) == 1:
-        # If preset provided exists
         if args[0] in presets:
+            # If preset provided exists
             for program in presets[args[0]]:
-                print(color(program, "OKGREEN"))
+                # Break each program of a particular preset into its name and path
+                programName, path = program
+                print(color(programName, "OKGREEN"))
+                # print(color("\t" + path, "OKGREEN"))
         else:
             # Preset doesn't exist
             print(color("No preset named '" + args[0] + "' exists.", "FAIL"))
     else:
-        tooManyArgs("list")
+        usageError("list")
+
+
+def wobCmd(args, presets):
+    if(not args):
+        usageError("wob", "No args provided.")
+    elif len(args) == 1:
+        if args[0] in presets:
+            
+            # If preset provided exists
+            for program in presets[args[0]]:
+
+                # Break each program of a particular preset into its name and path
+                programName, path = program
+                print(color("Starting '" + programName + "'...", "OKBLUE"))
+                startfile(path)
+        else:
+            # Preset doesn't exist
+            print(color("No preset named '" + args[0] + "' exists.", "FAIL"))
+    else:
+        usageError("wob")

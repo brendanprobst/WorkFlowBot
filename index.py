@@ -16,7 +16,12 @@ stream = open('config.yml', 'r')
 data = yaml.safe_load(stream)
 # Use the presets variable below globally
 presets = data['presets']
-
+# The username variable grabs the username of the current user on Windows
+username = os.getlogin()
+for preset in presets:
+    for program in presets[preset]:
+        if("SYS_USERNAME" in program[1]):
+            program[1] = str(program[1]).replace("SYS_USERNAME", username)
 
 def executeCommand(commandArr):
     """
@@ -33,13 +38,14 @@ def executeCommand(commandArr):
         commands.helpCmd(args)
     elif(cmd == "list"):
         commands.listCmd(args, presets)
+    elif(cmd == "wob"):
+        commands.wobCmd(args, presets)
     else:
         print("That command is valid, but not yet implemented.")
 
 
 def isValidCommand(command):
     commandArr = command.split()
-    # print(commandArr)
     if (not commandArr or commandArr[0] not in commands.allowedCmds):
         print(color("Invalid command. Type 'help' for a list of commands.", "FAIL"))
     else:
