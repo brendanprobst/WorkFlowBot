@@ -1,10 +1,10 @@
 ---
 presets:
   work:
-    - "program1"
-    - "program2"
-    - "program3"
+    - ["Google Chrome", "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"]
+    - ["Slack", "C:\\Users\\SYS_USERNAME\\AppData\\Local\\slack\\slack.exe"]
+    - ["Postman", "C:\\Users\\SYS_USERNAME\\AppData\\Local\\Postman\\Postman.exe"]
   gaming:
-    - "program4"
-    - "program5"
-    - "program6"
+    - ["program4", "path/to/file4"]
+    - ["program5", "path/to/file5"]
+    - ["program6", "path/to/file6"]
