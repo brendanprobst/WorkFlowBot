@@ -128,6 +128,6 @@ def newTemplateCmd(args):
         data["presets"][tempName] = temp
     with open("config.yml", "w") as stream:
         yaml.dump(data, stream)
-    print("Template with name:", tempName, "created! Please re-launch to use the template.")
+    print("Template with name:", tempName, "created!")
     
 

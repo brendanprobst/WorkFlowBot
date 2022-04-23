@@ -12,8 +12,8 @@ os.system('color')
 prompt = ">"
 
 
-stream = open('config.yml', 'r')
-data = yaml.safe_load(stream)
+with open('config.yml', 'r') as stream:
+    data = yaml.safe_load(stream)
 # Use the presets variable below globally
 presets = data['presets']
 # The username variable grabs the username of the current user on Windows
@@ -29,6 +29,9 @@ def executeCommand(commandArr):
     This function essentially maps user inputted commands to
     their corresponding function in the code.
     """
+    with open('config.yml', 'r') as stream:
+        data = yaml.safe_load(stream)
+    presets = data['presets']
     cmd = commandArr[0]
     args = []
     if(len(commandArr) > 1):
