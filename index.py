@@ -40,6 +40,8 @@ def executeCommand(commandArr):
         commands.listCmd(args, presets)
     elif(cmd == "wob"):
         commands.wobCmd(args, presets)
+    elif(cmd == "new"):
+        commands.newTemplateCmd(args)
     else:
         print("That command is valid, but not yet implemented.")
 

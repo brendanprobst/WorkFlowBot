@@ -1,4 +1,7 @@
-from os import startfile, getlogin
+import yaml
+from tkinter import Tk 
+from tkinter.filedialog import askopenfilenames
+import os
 from themes import color
 allowedCmds = {
     # Keep adding to this dictionary
@@ -13,6 +16,10 @@ allowedCmds = {
         "description": "Lists all presets. Optionally takes a preset as an arg to list programs for a specific preset."
     },
     "wob": {
+        "usage": "wob <preset>",
+        "description": "Opens the programs in a preset and closes other programs."
+    },
+    "new": {
         "usage": "wob <preset>",
         "description": "Opens the programs in a preset and closes other programs."
     },
@@ -89,9 +96,31 @@ def wobCmd(args, presets):
                 # Break each program of a particular preset into its name and path
                 programName, path = program
                 print(color("Starting '" + programName + "'...", "OKBLUE"))
-                startfile(path)
+                os.startfile(path)
         else:
             # Preset doesn't exist
             print(color("No preset named '" + args[0] + "' exists.", "FAIL"))
     else:
         usageError("wob")
+
+def newTemplateCmd(args):
+    tempName = args[0]
+    Tk().withdraw()
+    print("Naviagte to the file selector that has opened and select all programs you would like in the template.")
+    path = askopenfilenames()
+    pathNames = []
+    for thePath in path:
+        pathNames.append(os.path.split(thePath)[1])
+    with open("config.yml") as stream:
+        data = yaml.safe_load(stream)
+        data["presets"][tempName] = []
+        temp = []
+        for num in range(len(pathNames)):
+            temp.append([pathNames[num], path[num]])
+        data["presets"][tempName] = temp
+
+    with open("config.yml", "w") as stream:
+        yaml.dump(data, stream)
+    print("Template with name:", tempName, "created! Please re-launch to use the template.")
+    
+
