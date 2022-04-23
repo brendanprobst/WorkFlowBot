@@ -40,6 +40,8 @@ def executeCommand(commandArr):
         commands.listCmd(args, presets)
     elif(cmd == "wob"):
         commands.wobCmd(args, presets)
+    elif(cmd == "new"):
+        commands.newTemplateCmd(args)
     else:
         print("That command is valid, but not yet implemented.")
 
@@ -61,7 +63,8 @@ userInput = ""
 print("Type", color("wob <preset-name>", "WARNING"), "to open a preset.")
 print("Example:")
 print(">wob work")
-print("Or, type 'help' for a list of commands.\n")
+print("Or, type 'help' for a list of commands.")
+print("Type 'help' <command name> for usage of commands.\n")
 
 while (userInput != "quit"):
 
