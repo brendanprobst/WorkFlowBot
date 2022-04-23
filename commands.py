@@ -126,7 +126,6 @@ def newTemplateCmd(args):
         for num in range(len(pathNames)):
             temp.append([pathNames[num], path[num]])
         data["presets"][tempName] = temp
-        print(data)
     with open("config.yml", "w") as stream:
         yaml.dump(data, stream)
     print("Template with name:", tempName, "created! Please re-launch to use the template.")
