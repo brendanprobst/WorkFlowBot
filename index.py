@@ -63,7 +63,8 @@ userInput = ""
 print("Type", color("wob <preset-name>", "WARNING"), "to open a preset.")
 print("Example:")
 print(">wob work")
-print("Or, type 'help' for a list of commands.\n")
+print("Or, type 'help' for a list of commands.")
+print("Type 'help' <command name> for usage of commands.\n")
 
 while (userInput != "quit"):
 

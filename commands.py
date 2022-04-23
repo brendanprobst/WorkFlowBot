@@ -20,8 +20,8 @@ allowedCmds = {
         "description": "Opens the programs in a preset and closes other programs."
     },
     "new": {
-        "usage": "wob <preset>",
-        "description": "Opens the programs in a preset and closes other programs."
+        "usage": "new <template name>",
+        "description": "Allows user to create a new template of programs."
     },
 }
 
@@ -42,6 +42,7 @@ def helpCmd(args):
         # No argument provided, list all commands
         for key, value in allowedCmds.items():
             print(color(key + " -", "HEADER"), value['description'])
+        print("Type 'help' <command name> for usage of commands.\n")
     elif len(args) == 1:
         # Provide usage and description for specific command
         if(args[0] in allowedCmds):
@@ -105,8 +106,15 @@ def wobCmd(args, presets):
 
 def newTemplateCmd(args):
     tempName = args[0]
-    Tk().withdraw()
-    print("Naviagte to the file selector that has opened and select all programs you would like in the template.")
+    with open("config.yml") as stream:
+        data = yaml.safe_load(stream)
+        if(tempName in data["presets"]):
+            print(color("Template with name '" + tempName + "' already exists.", "FAIL"))
+            return
+    root = Tk();
+    root.withdraw()
+    root.attributes("-topmost", True)
+    print("Select all programs you would like in the template.")
     path = askopenfilenames()
     pathNames = []
     for thePath in path:
@@ -118,7 +126,7 @@ def newTemplateCmd(args):
         for num in range(len(pathNames)):
             temp.append([pathNames[num], path[num]])
         data["presets"][tempName] = temp
-
+        print(data)
     with open("config.yml", "w") as stream:
         yaml.dump(data, stream)
     print("Template with name:", tempName, "created! Please re-launch to use the template.")
