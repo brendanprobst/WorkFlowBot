@@ -45,14 +45,19 @@ def executeCommand(commandArr):
         commands.wobCmd(args, presets)
     elif cmd == "new":
         commands.newTemplateCmd(args)
+    elif cmd == "add":
+        commands.addToTemplateCmd(args)
     else:
         print("That command is valid, but not yet implemented.")
 
 
 def isValidCommand(command):
     commandArr = command.split()
-    if not commandArr or commandArr[0] not in commands.allowedCmds:
-        print(color("Invalid command. Type 'help' for a list of commands.", "FAIL"))
+    if (not commandArr or commandArr[0] not in commands.allowedCmds):
+        if(commandArr[0] == "quit"):
+            print(color("Quitting...", "WARNING"))
+        else:
+            print(color("Invalid command. Type 'help' for a list of commands.", "FAIL"))
     else:
         return True
 

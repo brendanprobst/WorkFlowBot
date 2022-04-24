@@ -24,6 +24,10 @@ allowedCmds = {
         "usage": "new <template name>",
         "description": "Allows user to create a new template of programs.",
     },
+    "add": {
+        "usage:": "add <template name>",
+        "description": "Allows user to add programs to an existing template."
+    }
 }
 
 
@@ -105,33 +109,79 @@ def wobCmd(args, presets):
 
 
 def newTemplateCmd(args):
-    tempName = args[0]
-    with open("config.yml") as stream:
-        data = yaml.safe_load(stream)
-        if tempName in data["presets"]:
-            print(
-                color("Template with name '" + tempName + "' already exists.", "FAIL")
-            )
-            return
-    root = Tk()
-    root.withdraw()
-    root.attributes("-topmost", True)
-    print(
-        "Select a program you would like in the template. Press done in file explorer when done."
-    )
+    if(not args):
+        usageError("new", "No args provided.")
+    elif len(args) == 1:
+        tempName = args[0]
+        with open("config.yml") as stream:
+            data = yaml.safe_load(stream)
+            if tempName in data["presets"]:
+                print(
+                    color("Template with name '" + tempName + "' already exists.", "FAIL")
+                )
+                return
+        root = Tk()
+        root.withdraw()
+        root.attributes("-topmost", True)
+        print(
+            "Select a program you would like in the template. Press done in file explorer when done."
+        )
 
-    temp = []
+        temp = []
 
-    path = "start"
-    while path:
-        path = askopenfilename()
-        pathName = os.path.split(path)[1]
-        if path:
-            temp.append([pathName, path])
+        path = "start"
+        while path:
+            path = askopenfilename()
+            pathName = os.path.split(path)[1]
+            if path:
+                temp.append([pathName, path])
 
-    with open("config.yml") as stream:
-        data = yaml.safe_load(stream)
-        data["presets"][tempName] = temp
-    with open("config.yml", "w") as stream:
-        yaml.dump(data, stream)
-    print("Template with name:", tempName, "created!")
+        with open("config.yml") as stream:
+            data = yaml.safe_load(stream)
+            data["presets"][tempName] = temp
+        with open("config.yml", "w") as stream:
+            yaml.dump(data, stream)
+        print("Template with name:", tempName, "created!")
+    else:
+        usageError("new")
+    
+    
+def addToTemplateCmd(args):
+    if(not args):
+        usageError("add", "No args provided.")
+    elif len(args) == 1:
+        tempName = args[0]
+        with open("config.yml") as stream:
+            data = yaml.safe_load(stream)
+            if tempName not in data["presets"]:
+                print(
+                    color("Template with name '" + tempName + "' does not exist.", "FAIL")
+                )
+                return
+        root = Tk()
+        root.withdraw()
+        root.attributes("-topmost", True)
+        print(
+            "Select a program you would like to add the template. Press done in file explorer when done."
+        )
+
+        temp = []
+
+        path = "start"
+        while path:
+            path = askopenfilename()
+            pathName = os.path.split(path)[1]
+            if path:
+                temp.append([pathName, path])
+
+        with open("config.yml") as stream:
+            data = yaml.safe_load(stream)
+            for prog in temp:
+                data["presets"][tempName].append(prog)
+        with open("config.yml", "w") as stream:
+            yaml.dump(data, stream)
+        print("Template with name:", tempName, "created!")
+    else:
+        usageError("add")
+
+    
