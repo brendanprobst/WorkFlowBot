@@ -1,4 +1,3 @@
-
 import yaml
 import os
 
@@ -7,21 +6,22 @@ import commands
 
 # The line below is required on Windows for
 # color formatting on default command prompt
-os.system('color')
+os.system("color")
 
 prompt = ">"
 
 
-stream = open('config.yml', 'r')
-data = yaml.safe_load(stream)
+with open("config.yml", "r") as stream:
+    data = yaml.safe_load(stream)
 # Use the presets variable below globally
-presets = data['presets']
+presets = data["presets"]
 # The username variable grabs the username of the current user on Windows
 username = os.getlogin()
 for preset in presets:
     for program in presets[preset]:
-        if("SYS_USERNAME" in program[1]):
+        if "SYS_USERNAME" in program[1]:
             program[1] = str(program[1]).replace("SYS_USERNAME", username)
+
 
 def executeCommand(commandArr):
     """
@@ -29,19 +29,24 @@ def executeCommand(commandArr):
     This function essentially maps user inputted commands to
     their corresponding function in the code.
     """
+    with open("config.yml", "r") as stream:
+        data = yaml.safe_load(stream)
+    presets = data["presets"]
     cmd = commandArr[0]
     args = []
-    if(len(commandArr) > 1):
+    if len(commandArr) > 1:
         args = commandArr[1:]
     print("")
-    if(cmd == "help"):
+    if cmd == "help":
         commands.helpCmd(args)
-    elif(cmd == "list"):
+    elif cmd == "list":
         commands.listCmd(args, presets)
-    elif(cmd == "wob"):
+    elif cmd == "wob":
         commands.wobCmd(args, presets)
-    elif(cmd == "new"):
+    elif cmd == "new":
         commands.newTemplateCmd(args)
+    elif cmd == "add":
+        commands.addToTemplateCmd(args)
     else:
         print("That command is valid, but not yet implemented.")
 
@@ -49,9 +54,13 @@ def executeCommand(commandArr):
 def isValidCommand(command):
     commandArr = command.split()
     if (not commandArr or commandArr[0] not in commands.allowedCmds):
-        print(color("Invalid command. Type 'help' for a list of commands.", "FAIL"))
+        if(commandArr[0] == "quit"):
+            print(color("Quitting...", "WARNING"))
+        else:
+            print(color("Invalid command. Type 'help' for a list of commands.", "FAIL"))
     else:
         return True
+
 
 # Initialize WOBot
 print(color("==============================================", "OKCYAN"))
@@ -66,12 +75,12 @@ print(">wob work")
 print("Or, type 'help' for a list of commands.")
 print("Type 'help' <command name> for usage of commands.\n")
 
-while (userInput != "quit"):
+while userInput != "quit":
 
     userInput = input(prompt)
     # TODO: prints after you type quit - figure out how to prevent that
     # print("Running command: " + userInput)
-    if (isValidCommand(userInput)):
+    if isValidCommand(userInput):
         # Sends user input to executeCommand as an array
         # executeCommand separates the input into the base
         # command and an array of args
