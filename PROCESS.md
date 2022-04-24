@@ -17,3 +17,6 @@ End of Process 2 [see image /processImages/process2]
 By the end of process2, WOBot was able to open batches of files, as well as create templates by selecting programs from the file explorer.
 
 Reflecting on process 2, we are happy with the work that got completed. With a little over a week left to work on this, we are now focusing our energy on the user experience. We have an .exe to run the bot, but still need to create documentation on how to use WOBot as well as handle any issues that people might encounter.
+
+You can access our notion here
+https://www.notion.so/c3fab94133bb43e991a102cb6a40d4ab?v=9b5caee72f334c7a9f4474c5c4b2dda3
